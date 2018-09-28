@@ -1,0 +1,144 @@
+아래 이슈에 대한 오버플로우
+error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+
+마지막 버전: 설치 이유는 commonjs가 ts1.8에서는 안먹는것 같아서 버전을 올려볼려고 한다.
+npm install typescript@latest -g
+
+tsconfig.json : 프로젝트 단위로 컴파일옵션과 컴파일대상에 대한 설정 이다.
+{
+    "compilerOptions": {
+      "declaration": false,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "moduleResolution": "node",
+      "target": "es5",
+      "module": "commonjs",
+      "sourceMap": true,
+      "outDir": "dist",
+      "rootDir": "src"
+    },
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
+
+컴파일파일 지정: files, include
+files를 지정하면 include옵션은 무시 된다.
+{
+  "files": [
+    "src/file1.ts",
+    "src/file2.ts"
+  ]
+}
+
+include: 컴파일대상, exclude: 컴파일대상 제외
+{
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
+
+컴파일 대상 지정
+src:/**/*: 폴더/서브폴더 아래에 모든 .ts, .tsx
+allowJs: true => .js, .jsx
+
+TaskRunner ? => 외부의 툴을 VSCode와 연동 시킬수 있음. CLI 실행되는 툴
+
+vscode 설정
+cmd + shift + p : configure task 설정
+configure Task Runner
+tsconfig.json => vscode에서 기본으로 설정해주는 파일은 삭제후 아래 작성된 내용으로 대처 이유는 더 찾아봐야 겠지만 기본적으로 제공해주는 설정으로는 에러가 발생함.
+ ㄴ 이슈해결 : module: commonjs가 문제이고 지우니 잘 된다.
+cmd + shift + b : 빌드
+
+// 디버깅을 위해서 아래 파일 작성
+// https://poiemaweb.com/typescript-vscode
+// https://stackoverflow.com/questions/31169259/how-to-debug-typescript-files-in-visual-studio-code
+
+launch.json
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceRoot}/src/hello.ts",
+        "outFiles": [
+          "${workspaceRoot}/dist/hello.js"
+        ],
+        "sourceMaps": true,
+        "stopOnEntry": false,
+        "args": [],
+        "cwd": "${workspaceRoot}",
+        "env": {
+            "NODE_ENV": "development"
+        },
+        "console": "internalConsole",
+        "preLaunchTask": "compile",
+        "name": "DEBUG"
+      },
+      {
+        "type": "node",
+        "request": "attach",
+        "name": "Attach to Process",
+        "port": 5858
+      }
+    ]
+  }
+
+tasks.json
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "compile",
+        "type": "typescript",
+        "tsconfig": "tsconfig.json",
+        "problemMatcher": [
+            "$tsc"
+        ],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        }
+      }
+    ]
+  }
+
+hello.ts
+
+class Parent {
+    public nameByPhone: string = "parent hello";
+}
+
+class Startup extends Parent {
+
+    public test(): string {
+
+        var nn = this.nameByPhone;
+        console.log(nn);
+
+        return "";
+    }
+
+    public static main(): number {
+        var name = 'ddddfkgjdklkdlfjgf';
+        console.log("hll86787686o");
+        console.log('Hello World');
+        return 0;
+    }
+}
+
+Startup.main();
