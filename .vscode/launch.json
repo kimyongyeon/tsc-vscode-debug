@@ -7,9 +7,9 @@
       {
         "type": "node",
         "request": "launch",
-        "program": "${workspaceRoot}/src/hello.ts",
+        "program": "${workspaceRoot}/src/index.ts",
         "outFiles": [
-          "${workspaceRoot}/dist/hello.js"
+          "${workspaceRoot}/dist/index.js"
         ],
         "sourceMaps": true,
         "stopOnEntry": false,
